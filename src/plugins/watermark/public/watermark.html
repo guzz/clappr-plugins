@@ -1,6 +1,11 @@
-<div class="clappr-watermark" data-watermark data-watermark-<%=position %>>
+<div
+  class="clappr-watermark"
+  data-watermark
+  data-watermark-<%=position %>
+  style="opacity:<%=opacity %>; transform: translate(<%=nudge.x %>px, <%=nudge.y %>px)"
+>
 <% if(typeof imageLink !== 'undefined') { %>
-<a target=_blank href="<%= imageLink %>">
+<a target=_blank href="<%= imageLink %>" onclick="(event) => event.stopPropagation();">
 <% } %>
 <img src="<%= imageUrl %>">
 <% if(typeof imageLink !== 'undefined') { %>
