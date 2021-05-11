@@ -99,7 +99,9 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
       }
       const transformedNudge = this.nudgeTransform(nudge)
       this.$el.find('.clappr-watermark')[0].style.transform = `translate(${transformedNudge.x}px, ${transformedNudge.y}px)`
-      this.$el.find('.clappr-watermark')[0].style.zIndex = 100000
+      if (!this.behavior.includes('fixed')) {
+        this.$el.find('.clappr-watermark')[0].style.zIndex = 100000
+      }
     }
     if (this.behavior.includes('discrete') && this.timeout) {
       this.$el.find('.clappr-watermark')[0].style.opacity = this.opacity

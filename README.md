@@ -193,6 +193,39 @@ var player = new Clappr.Player({
   watermarkLink: "http://example.net/"
 });
 ```
+
+You can also pass the watermark options in an object:
+```javascript
+var player = new Clappr.Player({
+  source: "http://your.video/here.mp4",
+  watermark: {
+    url: "http://url/img.png",
+    link: "http://example.net/",
+    position: "bottom-right",
+    opacity: 1,
+    // Default behavior is "always-fixed", without "fixed" it will
+    // nudge the whatermark when controls are visible and set it's z-index to 10000.
+    // Values permited: "discrete", "discrete-fixed", "always", "always-fixed".
+    // If the values don't match, it will fallback to "always-fixed".
+    behavior: "always-fixed",
+    // The delay and opacity for the watermark when in "discrete" behavior
+    discreteDelay: 3000,
+    discreteOpacity: 0.2,
+    // The nudge in pixels when the behavior is not fixed.
+    // This values are calculated according to the setted position.
+    onControls: {
+      x: 0,
+      y: 48
+    },
+    // Nudge the watermark
+    nudge: {
+      x: 0,
+      y: 0
+    }
+  }
+});
+```
+
 ### End video
 Add the possibility to exit from fullscreen mode when the video ends. The option `exitFullscreenOnEnd` disable this behavior.
 ```javascript
