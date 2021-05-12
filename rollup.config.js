@@ -15,7 +15,7 @@ const output = [
         file: 'dist/clappr-plugins.min.js',
         format: 'umd',
         name: 'ClapprPlugins',
-        globals: { '@clappr/core': 'Clappr' },
+        globals: { '@guzzj/clappr-core': 'Clappr' },
         plugins: terser(),
       },
     ]

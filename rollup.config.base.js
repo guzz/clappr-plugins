@@ -10,13 +10,13 @@ const { nodeResolve } = require('@rollup/plugin-node-resolve')
 const svg = require('rollup-plugin-svg')
 
 const { version } = require('./package.json')
-const { version: clapprCoreVersion } = require('@clappr/core/package.json')
+const { version: clapprCoreVersion } = require('@guzzj/clappr-core/package.json')
 
 const postcssOptions = {
   use: [
     ['sass', {
       includePaths: [
-        path.resolve('node_modules/@clappr/core/src/base/scss')
+        path.resolve('node_modules/@guzzj/clappr-core/src/base/scss')
       ]
     }]
   ]
@@ -24,14 +24,14 @@ const postcssOptions = {
 
 const baseConfig = {
   input: 'src/main.js',
-  external: ['@clappr/core'],
+  external: ['@guzzj/clappr-core'],
   output: [
     {
       file: 'dist/clappr-plugins.js',
       format: 'umd',
       name: 'ClapprPlugins',
       globals: {
-        '@clappr/core': 'Clappr',
+        '@guzzj/clappr-core': 'Clappr',
       }
     },
   ],
