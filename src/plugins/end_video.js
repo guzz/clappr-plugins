@@ -1,4 +1,4 @@
-import { CorePlugin, Events } from '@clappr/core'
+import { CorePlugin, Events } from '@guzzj/clappr-core'
 
 export default class EndVideo extends CorePlugin {
   get name() { return 'end_video' }

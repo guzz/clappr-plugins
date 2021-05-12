@@ -1,4 +1,4 @@
-import { Core, Container, Events, Playback, PlayerError } from '@clappr/core'
+import { Core, Container, Events, Playback, PlayerError } from '@guzzj/clappr-core'
 
 import ErrorScreen from './error_screen'
 

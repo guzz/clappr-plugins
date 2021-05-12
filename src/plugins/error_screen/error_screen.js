@@ -1,4 +1,4 @@
-import { Events, PlayerError, UICorePlugin, template } from '@clappr/core'
+import { Events, PlayerError, UICorePlugin, template } from '@guzzj/clappr-core'
 
 import reloadIcon from '../../icons/10-reload.svg'
 import templateHtml from './public/error_screen.html'

@@ -1,4 +1,4 @@
-import { CorePlugin, Events, $ } from '@clappr/core'
+import { CorePlugin, Events, $ } from '@guzzj/clappr-core'
 
 import playIcon from '../icons/01-play.svg'
 import pauseIcon from '../icons/02-pause.svg'

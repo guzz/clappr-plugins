@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-import { ContainerPlugin, Events } from '@clappr/core'
+import { ContainerPlugin, Events } from '@guzzj/clappr-core'
 
 export default class GoogleAnalytics extends ContainerPlugin {
   get name() { return 'google_analytics' }

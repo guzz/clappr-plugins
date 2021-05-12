@@ -1,4 +1,4 @@
-import { Events, Container, Playback } from '@clappr/core'
+import { Events, Container, Playback } from '@guzzj/clappr-core'
 
 import ClickToPause from './click_to_pause'
 

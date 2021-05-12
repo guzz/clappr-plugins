@@ -1,4 +1,4 @@
-import { Events, Playback, UICorePlugin, template } from '@clappr/core'
+import { Events, Playback, UICorePlugin, template } from '@guzzj/clappr-core'
 import dvrHTML from './public/index.html'
 import './public/dvr_controls.scss'
 

@@ -1,4 +1,4 @@
-import { Container, Playback } from '@clappr/core'
+import { Container, Playback } from '@guzzj/clappr-core'
 
 import GoogleAnalytics from './google_analytics'
 
