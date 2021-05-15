@@ -88,7 +88,7 @@ export default class MediaControl extends UICorePlugin {
 
   constructor(core) {
     super(core)
-    this.persistConfig = this.options.persistConfig
+    this.persistConfig = true
     this.currentPositionValue = null
     this.currentDurationValue = null
     this.keepVisible = false
@@ -294,7 +294,7 @@ export default class MediaControl extends UICorePlugin {
     this.$fullscreenToggle.append(icon)
     this.applyButtonStyle(this.$fullscreenToggle)
     this.$el.find('.media-control').length !== 0 && this.$el.removeClass('w320')
-    if (size.width <= 320 || this.options.hideVolumeBar) this.$el.addClass('w320')
+    this.$el.addClass('w320')
   }
 
   togglePlayPause() {

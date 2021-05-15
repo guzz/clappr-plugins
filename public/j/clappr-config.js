@@ -12,7 +12,6 @@ player = new Clappr.Player({
     window.DashShakaPlayback,
     ...plugins,
   ],
-  hideVolumeBar: true,
   closedCaptionsConfig: {
     title: 'Subtitles', // default is none
     ariaLabel: 'Closed Captions', // Default is 'cc-button'
