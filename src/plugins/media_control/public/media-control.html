@@ -35,16 +35,12 @@
   <% var renderButton = function(name) { %>
     <button type="button" class="media-control-button media-control-icon" data-<%= name %> aria-label="<%= name %>"></button>
   <% }; %>
-  <%  var templates = {
-        bar: renderBar,
-        segmentedBar: renderSegmentedBar,
-      };
-      var render = function(settingsList) {
+  <%  var render = function(settingsList) {
         settingsList.forEach(function(setting) {
           if(setting === "seekbar") {
             renderBar(setting);
           } else if (setting === "volume") {
-            renderDrawer(setting, settings.volumeBarTemplate ? templates[settings.volumeBarTemplate] : function(name) { return renderSegmentedBar(name); });
+            renderDrawer(setting, function(name) { return renderBar(name); });
           } else if (setting === "duration" || setting === "position") {
             renderIndicator(setting);
           } else {

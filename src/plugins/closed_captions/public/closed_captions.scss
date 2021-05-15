@@ -8,7 +8,9 @@
   }
 
   .cc-button {
-    padding: 6px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 20px !important;
 
     &.enabled {
       display: block;

@@ -3,12 +3,13 @@
   white-space: nowrap;
   height: 20px;
   line-height: 20px;
-  font-size: 0;
+  font-weight: 600;
   left: -100%;
   bottom: 55px;
-  background-color: rgba(2, 2, 2, 0.5);
+  background-color: rgba(2, 2, 2, 0);
   z-index: 9999;
   transition: opacity 0.1s ease;
+  letter-spacing: 1px;
 
   &.hidden[data-seek-time] {
     opacity: 0;
@@ -17,10 +18,11 @@
   [data-seek-time] {
     display: inline-block;
     color: white;
-    font-size: 10px;
+    font-size: 12px;
     padding-left: 7px;
     padding-right: 7px;
     vertical-align: top;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
   }
 
   [data-duration] {

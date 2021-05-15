@@ -1,6 +1,6 @@
 {
   "name": "@guzzj/clappr-plugins",
-  "version": "0.4.12",
+  "version": "0.4.14",
   "description": "Main plugins for the Clappr project",
   "main": "./dist/clappr-plugins.js",
   "module": "./dist/clappr-plugins.esm.js",
@@ -34,12 +34,12 @@
   },
   "homepage": "https://github.com/guzz/clappr-plugins",
   "peerDependencies": {
-    "@guzzj/clappr-core": "^0.4.19"
+    "@guzzj/clappr-core": "^0.4.20"
   },
   "devDependencies": {
     "@babel/core": "^7.12.10",
     "@babel/preset-env": "^7.12.11",
-    "@guzzj/clappr-core": "^0.4.19",
+    "@guzzj/clappr-core": "^0.4.20",
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.1",
     "@rollup/plugin-replace": "^2.3.4",

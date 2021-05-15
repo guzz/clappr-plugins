@@ -16,11 +16,26 @@ import mediaControlHTML from './public/media-control.html'
 import playIcon from '../../icons/01-play.svg'
 import pauseIcon from '../../icons/02-pause.svg'
 import stopIcon from '../../icons/03-stop.svg'
-import volumeIcon from '../../icons/04-volume.svg'
+import volumeIcon from '../../icons/04-volume-high.svg'
 import volumeMuteIcon from '../../icons/05-mute.svg'
 import fullscreenIcon from '../../icons/06-expand.svg'
 import exitFullscreenIcon from '../../icons/07-shrink.svg'
 import hdIcon from '../../icons/08-hd.svg'
+
+const PLAY_ICONS_PATHS = {
+  play: [
+    'M 8,4.175 14.285937,8 V 8 L 8,11.825 Z',
+    'M 1.7343592,0.35 8,4.175 v 7.65 L 1.7343592,15.65 Z'
+  ],
+  pause: [
+    'M 9.5745316,1.240614 14.287468,1.238904 V 14.761096 L 9.5745316,14.760614 Z',
+    'M 1.7125315,1.240614 6.375,1.2439291 V 14.756071 l -4.6624685,0.0045 z'
+  ],
+  stop: [
+    'M 8,1.24 14.285937,1.23829 V 14.760482 L 8,14.76 Z',
+    'M 1.7110001,1.24 H 8 V 14.76 H 1.7110001 Z'
+  ]
+}
 
 const { Config, Fullscreen, formatTime, extend, removeArrayItem } = Utils
 
@@ -171,7 +186,7 @@ export default class MediaControl extends UICorePlugin {
   }
 
   setInitialVolume() {
-    const initialVolume = (this.persistConfig) ? Config.restore('volume') : 100
+    const initialVolume = Config.restore('volume')
     const options = this.container && this.container.options || this.options
     this.setVolume(options.mute ? 0 : initialVolume, true)
   }
@@ -195,13 +210,13 @@ export default class MediaControl extends UICorePlugin {
     if (!this.rendered) return
 
     // update volume bar scrubber/fill on bar mode
-    this.$volumeBarContainer.find('.bar-fill-2').css({})
-    const containerWidth = this.$volumeBarContainer.width()
-    const barWidth = this.$volumeBarBackground.width()
+    this.$volumeBarContainer.find('.bar-fill-1').css({})
+    const containerWidth = this.$volumeBarContainer.height() - 20
+    const barWidth = this.$volumeBarBackground.height()
     const offset = (containerWidth - barWidth) / 2.0
     const pos = barWidth * this.volume / 100.0 + offset
     this.$volumeBarFill.css({ width: `${this.volume}%` })
-    this.$volumeBarScrubber.css({ left: pos })
+    this.$volumeBarScrubber.css({ left: pos + 10 })
 
     // update volume bar segments on segmented bar mode
     this.$volumeBarContainer.find('.segmented-bar-element').removeClass('fill')
@@ -219,15 +234,13 @@ export default class MediaControl extends UICorePlugin {
   }
 
   changeTogglePlay() {
-    this.$playPauseToggle.html('')
-    this.$playStopToggle.html('')
+    // this.$playPauseToggle.html('')
+    // this.$playStopToggle.html('')
     if (this.container && this.container.isPlaying()) {
-      this.$playPauseToggle.append(pauseIcon)
-      this.$playStopToggle.append(stopIcon)
+      this.animatePlayButton('play')
       this.trigger(Events.MEDIACONTROL_PLAYING)
     } else {
-      this.$playPauseToggle.append(playIcon)
-      this.$playStopToggle.append(playIcon)
+      this.animatePlayButton('pause')
       this.trigger(Events.MEDIACONTROL_NOTPLAYING)
       Browser.isMobile && this.show()
     }
@@ -235,12 +248,32 @@ export default class MediaControl extends UICorePlugin {
     this.applyButtonStyle(this.$playStopToggle)
   }
 
+  animatePlayButton(buttonType = 'play') {
+    if (!this.container) return
+    let button = this.$playPauseToggle
+    if (this.container.getPlaybackType() === Playback.LIVE) {
+      button = this.$playStopToggle
+      if (buttonType !== 'play') {
+        buttonType = 'stop'
+      }
+    } else if (buttonType !== 'play') {
+      buttonType = 'pause'
+    }
+    const path1 = button.find('#path1')[0]
+    const path2 = button.find('#path2')[0]
+    if (!path1 || !path2) return
+    path1.setAttribute('d', PLAY_ICONS_PATHS[buttonType][0])
+    path2.setAttribute('d', PLAY_ICONS_PATHS[buttonType][1])
+  }
+
   mousemoveOnSeekBar(event) {
     if (this.settings.seekEnabled) {
       const offsetX = event.pageX - this.$seekBarContainer.offset().left - (this.$seekBarHover.width() / 2)
       this.$seekBarHover.css({ left: offsetX })
     }
-    this.trigger(Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, event)
+    if (!this.draggingVolumeBar) {
+      this.trigger(Events.MEDIACONTROL_MOUSEMOVE_SEEKBAR, event)
+    }
   }
 
   mouseleaveOnSeekBar(event) {
@@ -313,13 +346,14 @@ export default class MediaControl extends UICorePlugin {
   }
 
   getVolumeFromUIEvent(event) {
-    const offsetY = event.pageX - this.$volumeBarContainer.offset().left
-    const volumeFromUI = (offsetY / this.$volumeBarContainer.width()) * 100
+    const offsetY = this.$volumeBarContainer.offset().top - 10 - event.pageY + this.$volumeBarContainer.height()
+    const volumeFromUI = (offsetY / (this.$volumeBarContainer.height() - 10)) * 100
     return volumeFromUI
   }
 
   toggleMute() {
-    this.setVolume(this.muted ? 100 : 0)
+    console.log(this.intendedVolume)
+    this.setVolume(this.muted ? this.intendedVolume : 0)
   }
 
   setVolume(value, isInitialVolume = false) {
@@ -327,8 +361,10 @@ export default class MediaControl extends UICorePlugin {
     // this will hold the intended volume
     // it may not actually get set to this straight away
     // if the container is not ready etc
-    this.intendedVolume = value
-    this.persistConfig && !isInitialVolume && Config.persist('volume', value)
+    if (value) {
+      this.intendedVolume = value
+    }
+    !isInitialVolume && Config.persist('volume', value)
     const setWhenContainerReady = () => {
       if (this.container && this.container.isReady) {
         this.container.setVolume(value)
@@ -368,16 +404,28 @@ export default class MediaControl extends UICorePlugin {
 
   showVolumeBar() {
     this.hideVolumeId && clearTimeout(this.hideVolumeId)
+    this.$el.find('.media-control-layer').addClass('hover-select')
+    this.updateVolumeUI()
     this.$volumeBarContainer.removeClass('volume-bar-hide')
+    this.$seekBarContainer.addClass('hide')
+    clearTimeout(this.seekBarVolumeTimeout)
   }
 
   hideVolumeBar(timeout = 400) {
     if (!this.$volumeBarContainer) return
+    if (!this.draggingVolumeBar) {
+      this.$el.find('.media-control-layer').removeClass('hover-select')
+    }
     if (this.draggingVolumeBar) {
       this.hideVolumeId = setTimeout(() => this.hideVolumeBar(), timeout)
     } else {
       this.hideVolumeId && clearTimeout(this.hideVolumeId)
       this.hideVolumeId = setTimeout(() => this.$volumeBarContainer.addClass('volume-bar-hide'), timeout)
+    }
+    if (!this.draggingVolumeBar) {
+      this.seekBarVolumeTimeout = setTimeout(() => {
+        this.$seekBarContainer.removeClass('hide')
+      }, 500)
     }
   }
 
@@ -545,7 +593,7 @@ export default class MediaControl extends UICorePlugin {
     this.$volumeContainer = $layer.find('.drawer-container[data-volume]')
     this.$volumeIcon = $layer.find('.drawer-icon[data-volume]')
     this.$volumeBarBackground = this.$el.find('.bar-background[data-volume]')
-    this.$volumeBarFill = this.$el.find('.bar-fill-1[data-volume]')
+    this.$volumeBarFill = this.$el.find('.bar-fill-2[data-volume]')
     this.$volumeBarScrubber = this.$el.find('.bar-scrubber[data-volume]')
     this.$hdIndicator = this.$el.find('button.media-control-button[data-hd-indicator]')
     this.resetIndicators()
@@ -670,7 +718,11 @@ export default class MediaControl extends UICorePlugin {
 
   render() {
     const timeout = this.options.hideMediaControlDelay || 2000
-    this.settings && this.$el.html(this.template({ settings: this.settings }))
+    this.settings && this.$el.html(this.template({ settings: {
+      default: ['seekbar'],
+      left: ['playpause', 'volume', 'position', 'duration'],
+      right: ['fullscreen', 'hd-indicator']
+    } }))
     this.createCachedElements()
     this.$playPauseToggle.addClass('paused')
     this.$playStopToggle.addClass('stopped')

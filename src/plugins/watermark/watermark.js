@@ -92,29 +92,27 @@ export default class WaterMarkPlugin extends UIContainerPlugin {
   }
 
   executeBehavior() {
-    if (!this.behavior.includes('fixed')) {
+    if (this.behavior && !this.behavior.includes('fixed')) {
       const nudge = {
         x: this.onControls.x + this.nudge.x,
         y: this.onControls.y + this.nudge.y
       }
       const transformedNudge = this.nudgeTransform(nudge)
       this.$el.find('.clappr-watermark')[0].style.transform = `translate(${transformedNudge.x}px, ${transformedNudge.y}px)`
-      if (!this.behavior.includes('fixed')) {
-        this.$el.find('.clappr-watermark')[0].style.zIndex = 100000
-      }
+      this.$el.find('.clappr-watermark')[0].style.zIndex = 100000
     }
-    if (this.behavior.includes('discrete') && this.timeout) {
+    if (this.behavior && this.behavior.includes('discrete') && this.timeout) {
       this.$el.find('.clappr-watermark')[0].style.opacity = this.opacity
       clearTimeout(this.timeout)
     }
   }
   
   resetBehavior() {
-    if (!this.behavior.includes('fixed')) {
+    if (this.behavior && !this.behavior.includes('fixed')) {
       const transformedNudge = this.nudgeTransform(this.nudge)
       this.$el.find('.clappr-watermark')[0].style.transform = `translate(${transformedNudge.x}px, ${transformedNudge.y}px)`
     }
-    if (this.behavior.includes('discrete')) {
+    if (this.behavior && this.behavior.includes('discrete')) {
       this.timeout = setTimeout(() => {
         if (!this.paused) {
           this.$el.find('.clappr-watermark')[0].style.opacity = this.discreteOpacity

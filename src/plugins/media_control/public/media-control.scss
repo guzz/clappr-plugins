@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap');
+
 .media-control-notransition {
   transition: none !important;
 }
@@ -8,18 +10,6 @@
   height: 100%;
   z-index: 9999;
   pointer-events: none;
-
-  &.dragging {
-    pointer-events: auto;
-    cursor: -webkit-grabbing !important;
-    cursor: grabbing !important;
-    cursor: url("./closed-hand.cur"), move;
-    * {
-      cursor: -webkit-grabbing !important;
-      cursor: grabbing !important;
-      cursor: url("./closed-hand.cur"), move;
-    }
-  }
 
   .media-control-background[data-background] {
     position: absolute;
@@ -44,7 +34,7 @@
 
   .media-control-icon:hover {
     color: white;
-    opacity: 0.75;
+    opacity: 1;
     text-shadow: rgba(255,255,255,0.8) 0 0 5px;
   }
 
@@ -58,6 +48,9 @@
         .bar-scrubber[data-seekbar] {
           opacity: 0;
         }
+      }
+      .bar-container[data-volume] {
+        display: none;
       }
     }
   }
@@ -156,21 +149,30 @@
 
       &[data-playpause] {
         float: left;
+        path {
+          transition: .2s ease !important;
+        }
       }
 
       &[data-playstop] {
         float: left;
+        path {
+          transition: .2s ease !important;
+        }
       }
     }
 
     .media-control-indicator {
       &[data-position], &[data-duration] {
         display: inline-block;
-        font-size: 10px;
+        font-size: 14px;
+        font-weight: 400;
         color: white;
         cursor: default;
         line-height: 32px;
         position: relative;
+        letter-spacing: 1px;
+        text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
       }
       &[data-position] {
         margin: 0 6px 0 7px;
@@ -191,6 +193,7 @@
       width: 100%;
       height: 25px;
       cursor: pointer;
+      transition: opacity .2s ease;
 
       .bar-background[data-seekbar] {
         width: 100%;
@@ -198,6 +201,7 @@
         position: relative;
         top: 12px;
         background-color: #666666;
+        transition: height .3s ease, top .3s ease, box-shadow .3s ease;
 
         .bar-fill-1[data-seekbar] {
           position: absolute;
@@ -222,30 +226,11 @@
         .bar-hover[data-seekbar] {
           opacity: 0;
           position: absolute;
-          top: -3px;
+          top: 0px;
           width: 5px;
-          height: 7px;
-          background-color: rgba(255,255,255,0.5);
-          transition: opacity 0.1s ease;
-        }
-      }
-
-      &:hover {
-        .bar-background[data-seekbar] {
-          .bar-hover[data-seekbar] {
-            opacity: 1;
-          }
-        }
-      }
-
-      &.seek-disabled {
-        cursor: default;
-        &:hover {
-          .bar-background[data-seekbar] {
-            .bar-hover[data-seekbar] {
-              opacity: 0;
-            }
-          }
+          height: 0px;
+          background-color: yellow;
+          transition: opacity 0.1s ease, height .3s ease;
         }
       }
 
@@ -261,23 +246,72 @@
 
         .bar-scrubber-icon[data-seekbar] {
           position: absolute;
-          left: 6px;
-          top: 6px;
-          width: 8px;
-          height: 8px;
+          left: 10px;
+          top: 10px;
+          width: 0px;
+          height: 0px;
           border-radius: 10px;
-          box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);
+          box-shadow: 0 0 0 0px rgba(255, 255, 255, 0.2);
           background-color: white;
+          transition: all .3s ease;
         }
+
+      }
+
+      &:hover {
+        .bar-background[data-seekbar] {
+          height: 3px;
+          top: 11px;
+          box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+          .bar-hover[data-seekbar] {
+            height: 3px;
+            opacity: 1;
+          }
+        }
+        .bar-scrubber[data-seekbar] {
+          .bar-scrubber-icon[data-seekbar] {
+            left: 6px;
+            top: 6px;
+            width: 8px;
+            height: 8px;
+            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);
+          }
+  
+          &:hover {
+            .bar-scrubber-icon[data-seekbar] {
+              left: 5px;
+              top: 5px;
+              width: 10px;
+              height: 10px;
+              box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.2);
+            }
+          }
+
+        }
+      }
+
+      &.seek-disabled {
+        cursor: default;
+        &:hover {
+          .bar-background[data-seekbar] {
+            .bar-hover[data-seekbar] {
+              opacity: 0;
+            }
+          }
+        }
+      }
+
+      &.hide {
+        opacity: 0;
       }
     }
 
     .drawer-container[data-volume] {
-      float: right;
+      float: left;
       display: inline-block;
       height: 32px;
       cursor: pointer;
-      margin: 0 6px;
+      margin: 0 3px 0 0;
       box-sizing: border-box;
 
       .drawer-icon-container[data-volume] {
@@ -291,35 +325,40 @@
           width: 32px;
           height: 32px;
           opacity: 0.5;
-          &:hover { opacity: 0.75; }
+          display: flex;
+          justify-content: center;
+          &:hover { opacity: 1; }
 
           svg {
-            height: 24px;
+            height: 26px;
             position: relative;
             top: 3px;
             path { fill: white; }
           }
 
-          &.muted svg { margin-left: 2px; }
+          // &.muted svg { margin-left: 2px; }
         }
       }
 
       .bar-container[data-volume] {
-        float: left;
-        position: relative;
-        overflow: hidden;
-        top: 6px;
-        width: 42px;
-        height: 18px;
-        padding: 3px 0;
-        transition: width .2s ease-out;
+        position: absolute;
+        transform: rotate(-90deg) translate(59px, -33px);
+        top: 0;
+        height: 20px;
+        width: 100px;
+        padding: 4px 10px;
+        transition: opacity .2s ease;
 
         .bar-background[data-volume] {
-          height: 1px;
+          overflow: hidden;
+          margin: 0;
+          height: 6px;
+          top: 3px;
+          border-radius: 6px;
           position: relative;
-          top: 7px;
-          margin: 0 3px;
-          background-color: #666666;
+          background-color: #aaaaaa;
+          box-shadow: 0 0 3px;
+          transition: height .2s ease, top .2s ease, border-radius .2s ease;
 
           .bar-fill-1[data-volume] {
             position: absolute;
@@ -359,17 +398,16 @@
           left: 0;
           width: 20px;
           height: 20px;
-          opacity: 1;
           transition: all 0.1s ease-out;
 
           .bar-scrubber-icon[data-volume] {
+            width: 12px;
+            height: 12px;
+            left: 4px;
+            top: 4px;
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.2);
             position: absolute;
-            left: 6px;
-            top: 6px;
-            width: 8px;
-            height: 8px;
             border-radius: 10px;
-            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.2);
             background-color: white;
           }
         }
@@ -398,6 +436,17 @@
         }
       }
     }
+    &.hover-select {
+      .media-control-icon {
+        opacity: .1;
+        &:hover {
+          opacity: 1;
+        }
+      }
+      .drawer-icon[data-volume].media-control-icon {
+        opacity: 1 !important;
+      }
+    }
   }
 
   &.w320 {
@@ -405,14 +454,64 @@
       .drawer-container[data-volume] {
         .bar-container[data-volume] {
           &.volume-bar-hide {
-            width: 0;
-            height: 12px;
-            top: 9px;
-            padding: 0;
+            opacity: 0;
+            z-index: -1;
           }
         }
       }
     }
   }
 
+  &.dragging {
+    pointer-events: auto;
+    cursor: -webkit-grabbing !important;
+    cursor: grabbing !important;
+    cursor: url("./closed-hand.cur"), move;
+    * {
+      cursor: -webkit-grabbing !important;
+      cursor: grabbing !important;
+      cursor: url("./closed-hand.cur"), move;
+    }
+
+    .bar-container[data-seekbar] .bar-background[data-seekbar] {
+      height: 3px !important;
+      top: 11px !important;
+
+      .bar-fill-1[data-seekbar] {
+        transition: none !important;
+      }
+
+      .bar-fill-2[data-seekbar] {
+        transition: none !important;
+      }
+
+    }
+    
+    .bar-scrubber {
+      transition: width .2s ease, height .2s ease !important;
+
+      .bar-scrubber-icon {
+        width: 12px !important;
+        height: 12px !important;
+        left: 4px !important;
+        top: 4px !important;
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.2) !important;
+      }
+    }
+
+    .bar-background[data-volume] {
+      .bar-fill-2[data-volume] {
+        transition: none !important;
+      }
+    }
+  }
 }
+
+div[data-player] {
+  ::cue {
+    color: white;
+    background: transparent;
+    text-shadow: 0 0 3px black;
+  }
+}
+
